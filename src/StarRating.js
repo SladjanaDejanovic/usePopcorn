@@ -73,10 +73,10 @@ function Star({ onRate, full, onHoverIn, onHoverOut, color, size }) {
   const starStyle = {
     width: `${size}px`,
     height: `${size}px`,
-
     display: "block",
     cursor: "pointer",
   };
+
   return (
     <span
       style={starStyle}
