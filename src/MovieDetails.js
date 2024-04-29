@@ -52,6 +52,7 @@ export default function MovieDetails({
     onCloseMovie();
   }
 
+  // GEyying movie from API
   useEffect(
     function () {
       async function getMovieDetails() {
@@ -66,6 +67,24 @@ export default function MovieDetails({
       getMovieDetails();
     },
     [selectedId]
+  );
+
+  // Listening keypress = ESC to close movie details
+  useEffect(
+    function () {
+      function callback(e) {
+        if (e.code === "Escape") {
+          onCloseMovie();
+        }
+      }
+
+      document.addEventListener("keydown", callback);
+
+      return function () {
+        document.removeEventListener("keydown", callback);
+      };
+    },
+    [onCloseMovie]
   );
 
   // Change title of page depending on selected movie

@@ -57,7 +57,7 @@ import { WatchedMoviesList, WatchedSummary } from "./Watched";
 const KEY = "647f7439";
 
 export default function App() {
-  const [query, setQuery] = useState("inception");
+  const [query, setQuery] = useState("");
   // const tempQuery = "Interstellar";
 
   const [movies, setMovies] = useState([]);
@@ -100,25 +100,27 @@ export default function App() {
             throw new Error("Something went wrong with fetching movies");
 
           const data = await res.json();
+
           if (data.Response === "False") throw new Error("Movie not found");
+
           setMovies(data.Search);
           setError("");
         } catch (err) {
-          console.error(err.message);
-
           if (err.name !== "AbortError") {
+            console.error(err.message);
             setError(err.message);
           }
         } finally {
           setIsLoading(false);
         }
       }
+
       if (query.length < 3) {
         setMovies([]);
         setError("");
         return;
       }
-
+      handleCloseMovie();
       fetchMovies();
 
       return function () {
