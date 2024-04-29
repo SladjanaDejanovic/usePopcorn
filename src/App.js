@@ -1,5 +1,5 @@
 import { func } from "prop-types";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 // import StarRating from "./StarRating";
 
 import MovieDetails from "./MovieDetails";
@@ -67,6 +67,8 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // useState() accepts callback func as initial state (pure func, without arguments), good for when we need to read data from local storage for example
+  // and it's called only on initial render of the component(same as if we passed another value to be used as initial state)
   const [watched, setWatched] = useState(function () {
     const storedValue = localStorage.getItem("watched");
     return JSON.parse(storedValue);
@@ -199,6 +201,26 @@ function Logo() {
 }
 
 function Search({ query, setQuery }) {
+  const inputEl = useRef(null);
+
+  // ref only gets added to DOM element after DOM already loaded, so we can only access it in effect (which also runs after DOM has been loaded)
+  useEffect(
+    function () {
+      function callback(e) {
+        if (document.activeElement === inputEl.current) return;
+
+        if (e.code === "Enter") {
+          inputEl.current.focus();
+          setQuery("");
+        }
+      }
+
+      document.addEventListener("keydown", callback);
+      return () => document.removeEventListener("keydown", callback);
+    },
+    [setQuery]
+  );
+
   return (
     <input
       className="search"
@@ -206,6 +228,7 @@ function Search({ query, setQuery }) {
       placeholder="Search movies..."
       value={query}
       onChange={(e) => setQuery(e.target.value)}
+      ref={inputEl}
     />
   );
 }
