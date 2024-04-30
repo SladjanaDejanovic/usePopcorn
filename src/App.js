@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useState, useRef } from "react";
 
 import MovieDetails from "./MovieDetails";
 import { Loader, ErrorMessage } from "./Loader-Error";
