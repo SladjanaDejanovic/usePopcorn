@@ -6,6 +6,7 @@ import { Loader, ErrorMessage } from "./Loader-Error";
 import { WatchedMoviesList, WatchedSummary } from "./Watched";
 import { useMovies } from "./useMovies";
 import { useLocalStorageState } from "./useLocalStorageState";
+import { useKey } from "./useKey";
 
 // const tempMovieData = [
 //   {
@@ -147,24 +148,12 @@ function Logo() {
 
 function Search({ query, setQuery }) {
   const inputEl = useRef(null);
-
   // ref only gets added to DOM element after DOM already loaded, so we can only access it in effect (which also runs after DOM has been loaded)
-  useEffect(
-    function () {
-      function callback(e) {
-        if (document.activeElement === inputEl.current) return;
-
-        if (e.code === "Enter") {
-          inputEl.current.focus();
-          setQuery("");
-        }
-      }
-
-      document.addEventListener("keydown", callback);
-      return () => document.removeEventListener("keydown", callback);
-    },
-    [setQuery]
-  );
+  useKey("Enter", function () {
+    if (document.activeElement === inputEl.current) return;
+    inputEl.current.focus();
+    setQuery("");
+  });
 
   return (
     <input

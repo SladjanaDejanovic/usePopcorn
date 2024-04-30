@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 
 import StarRating from "./StarRating";
+import { useKey } from "./useKey";
 
 const KEY = "647f7439";
 
@@ -80,23 +81,8 @@ export default function MovieDetails({
     [selectedId]
   );
 
-  // Listening keypress = ESC to close movie details
-  useEffect(
-    function () {
-      function callback(e) {
-        if (e.code === "Escape") {
-          onCloseMovie();
-        }
-      }
-
-      document.addEventListener("keydown", callback);
-
-      return function () {
-        document.removeEventListener("keydown", callback);
-      };
-    },
-    [onCloseMovie]
-  );
+  // Listening keypress = ESC to close movie details (custom hook)
+  useKey("Escape", onCloseMovie);
 
   // Change title of page depending on selected movie
   useEffect(
